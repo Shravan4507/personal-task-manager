@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlanIt - Task Calendar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="assets/logo.png" alt="PlanIt Logo" class="logo-img">
+                </div>
+                <p class="app-tagline">Your Smart Task Calendar</p>
+            </div>
+            <div class="header-right">
+                <button class="btn-icon" id="todayBtn" title="Go to Today">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="4" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M3 8H17" stroke="currentColor" stroke-width="2"/>
+                        <path d="M7 2V6M13 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Today</span>
+                </button>
+                <button class="btn-primary" id="addTaskBtn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Add Task</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="5" width="14" height="2" rx="1" fill="currentColor"/>
+                        <rect x="3" y="9" width="14" height="2" rx="1" fill="currentColor"/>
+                        <rect x="3" y="13" width="14" height="2" rx="1" fill="currentColor"/>
+                    </svg>
+                </button>
+                <div class="view-switcher">
+                    <button class="view-btn" data-view="day">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M2 7H16" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                    <span>Day</span>
+                </button>
+                <button class="view-btn" data-view="week">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="1" y="3" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M1 7H17" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M5 3V7M9 3V7M13 3V7" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                    <span>Week</span>
+                </button>
+                <button class="view-btn active" data-view="month">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="3" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M2 7H16M6 3V5M12 3V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="6" cy="10" r="0.75" fill="currentColor"/>
+                        <circle cx="9" cy="10" r="0.75" fill="currentColor"/>
+                        <circle cx="12" cy="10" r="0.75" fill="currentColor"/>
+                        <circle cx="6" cy="13" r="0.75" fill="currentColor"/>
+                        <circle cx="9" cy="13" r="0.75" fill="currentColor"/>
+                    </svg>
+                    <span>Month</span>
+                </button>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <button class="nav-btn" id="navPrevBtn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <h2 class="nav-current-date" id="navCurrentDate"></h2>
+                <button class="nav-btn" id="navNextBtn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="nav-menu">
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M10 2V4M10 16V18M18 10H16M4 10H2M15.66 15.66L14.24 14.24M5.76 5.76L4.34 4.34M15.66 4.34L14.24 5.76M5.76 14.24L4.34 15.66" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17 11.5C16.2 14.5 13.5 17 10 17C6.13401 17 3 13.866 3 10C3 6.5 5.5 3.8 8.5 3C7.8 3.9 7.5 5 7.5 6.2C7.5 9.2 9.8 11.5 12.8 11.5C14 11.5 15.1 11.2 16 10.5C16.3 10.8 16.6 11.1 17 11.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="menu-btn" id="menuBtn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="10" cy="4" r="1.5" fill="currentColor"/>
+                        <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
+                        <circle cx="10" cy="16" r="1.5" fill="currentColor"/>
+                    </svg>
+                </button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="#" class="menu-item" id="exportTasks">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 12V3M9 3L6 6M9 3L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3 12V14C3 14.5523 3.44772 15 4 15H14C14.5523 15 15 14.5523 15 14V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        Export Tasks
+                    </a>
+                    <a href="#" class="menu-item" id="importTasks">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 3V12M9 12L6 9M9 12L12 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3 12V14C3 14.5523 3.44772 15 4 15H14C14.5523 15 15 14.5523 15 14V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        Import Tasks
+                    </a>
+                    <a href="#" class="menu-item" id="clearCompleted">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 6H14M6 6V4C6 3.44772 6.44772 3 7 3H11C11.5523 3 12 3.44772 12 4V6M8 9V13M10 9V13M5 6L6 14C6 14.5523 6.44772 15 7 15H11C11.5523 15 12 14.5523 12 14L13 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        Clear Completed
+                    </a>
+                    <hr class="menu-divider">
+                    <a href="#" class="menu-item" id="aboutApp">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M9 9V12M9 6H9.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        About PlanIt
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar hidden" id="sidebar">
+            <div class="sidebar-content">
+                <!-- 1. Task Statistics Dashboard -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <div class="stat-value" id="totalTasks">0</div>
+                                <div class="stat-label">Total Tasks</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <div class="stat-value" id="completedTasks">0</div>
+                                <div class="stat-label">Completed</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <div class="stat-value" id="pendingTasks">0</div>
+                                <div class="stat-label">Pending</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <div class="stat-value" id="streakDays">0</div>
+                                <div class="stat-label">Day Streak</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-label">
+                            <span>Completion Rate</span>
+                            <span id="completionRate">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Quick Actions Panel -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Quick Actions</h3>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn" id="quickAddTask">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 3V15M3 9H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Quick Add Task
+                        </button>
+                        <input type="text" class="quick-search" id="quickSearch" placeholder="Search tasks...">
+                        <select class="quick-filter" id="filterByColor">
+                            <option value="all">All Colors</option>
+                            <option value="red">Red</option>
+                            <option value="orange">Orange</option>
+                            <option value="yellow">Yellow</option>
+                            <option value="green">Green</option>
+                            <option value="blue">Blue</option>
+                            <option value="purple">Purple</option>
+                            <option value="pink">Pink</option>
+                            <option value="indigo">Indigo</option>
+                            <option value="teal">Teal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 3. Mini Calendar Widget -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Mini Calendar</h3>
+                    <div class="mini-calendar" id="miniCalendar"></div>
+                </div>
+
+                <!-- 4. Upcoming Tasks List -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Upcoming Tasks</h3>
+                    <div class="upcoming-tasks" id="upcomingTasks">
+                        <p class="empty-message">No upcoming tasks</p>
+                    </div>
+                </div>
+
+                <!-- 5. Notes Section -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Quick Notes</h3>
+                    <textarea class="notes-area" id="quickNotes" placeholder="Write your notes here..."></textarea>
+                </div>
+
+                <!-- 6. Custom Timer (Google Timer Style) -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Timer</h3>
+                    <div class="custom-timer">
+                        <!-- Timer Name -->
+                        <input type="text" class="timer-name-input" id="timerNameInput" placeholder="Timer name (optional)" maxlength="30">
+                        
+                        <!-- Progress Ring -->
+                        <div class="timer-progress-ring">
+                            <svg width="140" height="140" class="progress-ring">
+                                <circle class="progress-ring-bg" cx="70" cy="70" r="60" />
+                                <circle class="progress-ring-bar" id="progressRing" cx="70" cy="70" r="60" />
+                            </svg>
+                            <div class="timer-display-center" id="timerDisplay">00:00:00</div>
+                        </div>
+                        
+                        <!-- Time Picker -->
+                        <div class="time-picker">
+                            <div class="time-input-group">
+                                <input type="number" class="time-input" id="hoursInput" min="0" max="23" value="0" placeholder="00">
+                                <label class="time-label">Hours</label>
+                            </div>
+                            <span class="time-separator">:</span>
+                            <div class="time-input-group">
+                                <input type="number" class="time-input" id="minutesInput" min="0" max="59" value="25" placeholder="00">
+                                <label class="time-label">Minutes</label>
+                            </div>
+                            <span class="time-separator">:</span>
+                            <div class="time-input-group">
+                                <input type="number" class="time-input" id="secondsInput" min="0" max="59" value="0" placeholder="00">
+                                <label class="time-label">Seconds</label>
+                            </div>
+                        </div>
+                        
+                        <!-- Controls -->
+                        <div class="timer-controls">
+                            <button class="timer-btn timer-btn-primary" id="timerStart">
+                                ▶ Start
+                            </button>
+                            <button class="timer-btn" id="timerPause" style="display:none;">
+                                ⏸ Pause
+                            </button>
+                            <button class="timer-btn" id="timerReset">↻ Reset</button>
+                            <button class="timer-btn timer-btn-save" id="timerSave">Save</button>
+                        </div>
+                        
+                        <!-- Saved Timers -->
+                        <div class="saved-timers-section">
+                            <div class="saved-timers-header">
+                                <h4>Quick Access</h4>
+                                <button class="btn-add-preset" id="btnAddPreset" title="Add current timer as preset">+ Add</button>
+                            </div>
+                            <div class="saved-timers-list" id="savedTimersList">
+                                <!-- Default presets -->
+                                <div class="timer-preset" data-name="Pomodoro Work" data-hours="0" data-minutes="25" data-seconds="0">
+                                    <div class="preset-info">
+                                        <div class="preset-name">Pomodoro Work</div>
+                                        <div class="preset-duration">25:00</div>
+                                    </div>
+                                    <div class="preset-actions">
+                                        <button class="preset-btn-load" title="Load timer">▶</button>
+                                        <button class="preset-btn-delete" title="Delete">×</button>
+                                    </div>
+                                </div>
+                                <div class="timer-preset" data-name="Short Break" data-hours="0" data-minutes="5" data-seconds="0">
+                                    <div class="preset-info">
+                                        <div class="preset-name">Short Break</div>
+                                        <div class="preset-duration">5:00</div>
+                                    </div>
+                                    <div class="preset-actions">
+                                        <button class="preset-btn-load" title="Load timer">▶</button>
+                                        <button class="preset-btn-delete" title="Delete">×</button>
+                                    </div>
+                                </div>
+                                <div class="timer-preset" data-name="Long Break" data-hours="0" data-minutes="15" data-seconds="0">
+                                    <div class="preset-info">
+                                        <div class="preset-name">Long Break</div>
+                                        <div class="preset-duration">15:00</div>
+                                    </div>
+                                    <div class="preset-actions">
+                                        <button class="preset-btn-load" title="Load timer">▶</button>
+                                        <button class="preset-btn-delete" title="Delete">×</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Settings Toggle -->
+                        <button class="timer-settings-toggle" id="timerSettingsToggle">⚙ Notification Settings</button>
+                        
+                        <!-- Settings Panel -->
+                        <div class="timer-settings-panel" id="timerSettingsPanel" style="display:none;">
+                            <div class="timer-setting">
+                                <label class="timer-checkbox">
+                                    <input type="checkbox" id="notificationsEnabled" checked>
+                                    Desktop notifications
+                                </label>
+                            </div>
+                            <div class="timer-setting">
+                                <label class="timer-checkbox">
+                                    <input type="checkbox" id="soundEnabled" checked>
+                                    Sound notification
+                                </label>
+                            </div>
+                            <div class="timer-setting">
+                                <label class="timer-checkbox">
+                                    <input type="checkbox" id="autoRepeat">
+                                    Auto-repeat timer
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Tags/Categories Panel -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Tags</h3>
+                    <div class="tags-container" id="tagsContainer">
+                        <div class="tag-badge" data-tag="all">
+                            <span class="tag-name">All Tasks</span>
+                            <span class="tag-count" id="tagCountAll">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. Battery Status Widget -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Battery Status</h3>
+                    <div class="battery-widget" id="batteryWidget">
+                        <div class="battery-icon" id="batteryIcon">🔋</div>
+                        <div class="battery-info">
+                            <div class="battery-level" id="batteryLevel">Loading...</div>
+                            <div class="battery-status" id="batteryStatus">Checking device...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. Motivational Quote -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Daily Inspiration</h3>
+                    <div class="quote-container" id="quoteContainer">
+                        <p class="quote-text">"The secret of getting ahead is getting started."</p>
+                        <p class="quote-author">— Mark Twain</p>
+                    </div>
+                </div>
+
+                <!-- 10. Activity Feed -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Recent Activity</h3>
+                    <div class="activity-feed" id="activityFeed">
+                        <p class="empty-message">No recent activity</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="main-content">
+        <!-- Month View (Default) -->
+        <div class="calendar-view" id="monthView" data-view="month">
+            <!-- Month Calendar Grid -->
+            <div class="calendar month-calendar">
+                <div class="calendar-header">
+                    <div class="day-label">Sun</div>
+                    <div class="day-label">Mon</div>
+                    <div class="day-label">Tue</div>
+                    <div class="day-label">Wed</div>
+                    <div class="day-label">Thu</div>
+                    <div class="day-label">Fri</div>
+                    <div class="day-label">Sat</div>
+                </div>
+                <div class="calendar-grid" id="monthCalendarGrid"></div>
+            </div>
+        </div>
+
+        <!-- Week View -->
+        <div class="calendar-view" id="weekView" data-view="week" style="display: none;">
+            <div class="week-calendar">
+                <div class="week-header" id="weekHeader"></div>
+                <div class="week-grid" id="weekGrid"></div>
+            </div>
+        </div>
+
+        <!-- Day View -->
+        <div class="calendar-view" id="dayView" data-view="day" style="display: none;">
+            <div class="day-calendar">
+                <div class="day-header" id="dayHeader"></div>
+                <div class="day-timeline" id="dayTimeline"></div>
+            </div>
+        </div>
+
+        <!-- Task Modal -->
+        <div class="modal" id="taskModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modalTitle">Add Task</h3>
+                    <button class="close-btn" id="closeModal" aria-label="Close modal">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <form id="taskForm">
+                    <div class="form-group">
+                        <label for="taskTitle">Task Title *</label>
+                        <input type="text" id="taskTitle" placeholder="Enter task title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDate">Date *</label>
+                        <div class="custom-input-wrapper">
+                            <input type="text" id="taskDateDisplay" class="custom-date-input" placeholder="Select date" readonly required>
+                            <button type="button" class="input-icon-btn" id="datePickerBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="3" y="6" width="18" height="15" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M3 10H21" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M8 3V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M16 3V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                            <input type="date" id="taskDate" style="display: none;" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskTime">Time</label>
+                        <div class="custom-input-wrapper">
+                            <input type="text" id="taskTimeDisplay" class="custom-time-input" placeholder="Select time (optional)" readonly>
+                            <button type="button" class="input-icon-btn" id="timePickerBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                            <input type="time" id="taskTime" style="display: none;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDescription">Description</label>
+                        <textarea id="taskDescription" rows="3" placeholder="Optional description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="taskRecurring">
+                            <span>Repeat this task</span>
+                        </label>
+                    </div>
+                    <div class="form-group recurrence-options" id="recurrenceOptions" style="display: none;">
+                        <label for="recurrenceType">Repeat</label>
+                        <select id="recurrenceType" class="form-select">
+                            <option value="daily">Daily</option>
+                            <option value="weekly" selected>Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                        <label for="recurrenceInterval" style="margin-top: 10px;">Every</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="number" id="recurrenceInterval" min="1" max="30" value="1" style="width: 80px;">
+                            <span id="recurrenceIntervalLabel">week(s)</span>
+                        </div>
+                        <label for="recurrenceEndDate" style="margin-top: 10px;">Until</label>
+                        <input type="date" id="recurrenceEndDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="taskTags">Tags</label>
+                        <div class="tags-input-container">
+                            <div class="selected-tags" id="selectedTags"></div>
+                            <div class="tags-suggestions">
+                                <button type="button" class="tag-suggestion" data-tag="Work">Work</button>
+                                <button type="button" class="tag-suggestion" data-tag="Personal">Personal</button>
+                                <button type="button" class="tag-suggestion" data-tag="Urgent">Urgent</button>
+                            </div>
+                            <div class="custom-tag-input">
+                                <input type="text" id="customTagInput" placeholder="Add custom tag...">
+                                <button type="button" id="addCustomTag" class="btn-add-tag">+ Add</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskColor">Color</label>
+                        <div class="color-picker">
+                            <label class="color-option">
+                                <input type="radio" name="taskColor" value="red" checked>
+                                <span class="color-swatch color-red"></span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="taskColor" value="orange">
+                                <span class="color-swatch color-orange"></span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="taskColor" value="yellow">
+                                <span class="color-swatch color-yellow"></span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="taskColor" value="green">
+                                <span class="color-swatch color-green"></span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="taskColor" value="blue">
+                                <span class="color-swatch color-blue"></span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="taskColor" value="purple">
+                                <span class="color-swatch color-purple"></span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="taskColor" value="pink">
+                                <span class="color-swatch color-pink"></span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="taskColor" value="indigo">
+                                <span class="color-swatch color-indigo"></span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="taskColor" value="teal">
+                                <span class="color-swatch color-teal"></span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="taskColor" value="neon">
+                                <span class="color-swatch color-neon"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="saveBtn">Save Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Task Details Modal -->
+        <div class="modal" id="taskDetailsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Task Details</h3>
+                    <button class="close-btn" id="closeDetailsModal" aria-label="Close modal">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="task-details">
+                    <h4 id="detailTitle"></h4>
+                    <p class="detail-time" id="detailTime"></p>
+                    <p class="detail-description" id="detailDescription"></p>
+                    <div class="detail-status">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="detailCompleted">
+                            <span>Mark as completed</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-danger" id="deleteTaskBtn">Delete</button>
+                    <button type="button" class="btn btn-primary" id="editTaskBtn">Edit</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day Popover (Google Calendar style) -->
+        <div class="day-popover" id="dayPopover">
+            <div class="popover-header">
+                <h4 class="popover-date" id="popoverDate"></h4>
+                <button class="popover-close" id="popoverClose">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="popover-content" id="popoverContent">
+                <!-- Tasks will be dynamically inserted here -->
+            </div>
+            <div class="popover-footer">
+                <button class="btn-add-task" id="popoverAddTask">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 3V15M3 9H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Add Task
+                </button>
+            </div>
+        </div>
+
+        <!-- Info Toast -->
+        <div class="toast" id="toast"></div>
+        
+        <!-- Custom Date Picker -->
+        <div class="custom-picker-overlay" id="datePickerOverlay">
+            <div class="custom-picker date-picker">
+                <div class="picker-header">
+                    <button type="button" class="picker-nav-btn" id="datePrevMonth">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <div class="picker-title" id="datePickerTitle">October 2025</div>
+                    <button type="button" class="picker-nav-btn" id="dateNextMonth">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="picker-weekdays">
+                    <div class="picker-weekday">Su</div>
+                    <div class="picker-weekday">Mo</div>
+                    <div class="picker-weekday">Tu</div>
+                    <div class="picker-weekday">We</div>
+                    <div class="picker-weekday">Th</div>
+                    <div class="picker-weekday">Fr</div>
+                    <div class="picker-weekday">Sa</div>
+                </div>
+                <div class="picker-days" id="datePickerDays"></div>
+                <div class="picker-footer">
+                    <button type="button" class="picker-btn picker-btn-secondary" id="dateClearBtn">Clear</button>
+                    <button type="button" class="picker-btn picker-btn-primary" id="dateTodayBtn">Today</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Custom Time Picker -->
+        <div class="custom-picker-overlay" id="timePickerOverlay">
+            <div class="custom-picker time-picker">
+                <div class="picker-header">
+                    <div class="picker-title">Select Time</div>
+                </div>
+                <div class="time-picker-body">
+                    <div class="time-column-wrapper">
+                        <div class="time-column" id="hourColumn">
+                            <!-- Hours 00-23 -->
+                        </div>
+                        <div class="time-separator">:</div>
+                        <div class="time-column" id="minuteColumn">
+                            <!-- Minutes 00-59 -->
+                        </div>
+                    </div>
+                </div>
+                <div class="picker-footer">
+                    <button type="button" class="picker-btn picker-btn-secondary" id="timeClearBtn">Clear</button>
+                    <button type="button" class="picker-btn picker-btn-primary" id="timeSetBtn">Set Time</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Keyboard Shortcuts Modal -->
+        <div class="modal" id="shortcutsModal">
+            <div class="modal-content shortcuts-modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">⌨️ Keyboard Shortcuts</h3>
+                    <button class="close-btn" id="closeShortcutsModal" aria-label="Close modal">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="shortcuts-content">
+                    <div class="shortcuts-section">
+                        <h4>Navigation</h4>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>T</kbd></span>
+                            <span class="shortcut-desc">Go to Today</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys"><kbd>←</kbd> / <kbd>→</kbd></span>
+                            <span class="shortcut-desc">Navigate Days/Weeks/Months</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys"><kbd>S</kbd></span>
+                            <span class="shortcut-desc">Toggle Sidebar</span>
+                        </div>
+                    </div>
+                    <div class="shortcuts-section">
+                        <h4>Tasks</h4>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>N</kbd></span>
+                            <span class="shortcut-desc">Quick Add Task</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>Z</kbd></span>
+                            <span class="shortcut-desc">Undo Last Action</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>Y</kbd></span>
+                            <span class="shortcut-desc">Redo Action</span>
+                        </div>
+                    </div>
+                    <div class="shortcuts-section">
+                        <h4>Search & General</h4>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>F</kbd></span>
+                            <span class="shortcut-desc">Focus Search</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>/</kbd></span>
+                            <span class="shortcut-desc">Show This Menu</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys"><kbd>Esc</kbd></span>
+                            <span class="shortcut-desc">Close Modal/Menu</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys"><kbd>Enter</kbd></span>
+                            <span class="shortcut-desc">Submit Form</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="shortcuts-footer">
+                    <p style="text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                        💡 Tip: Use <kbd>Cmd</kbd> instead of <kbd>Ctrl</kbd> on Mac
+                    </p>
+                </div>
+            </div>
+        </div>
+        </div> <!-- End of main-content -->
+    </div> <!-- End of container -->
+
+    <script src="script.js"></script>
+</body>
+</html>
