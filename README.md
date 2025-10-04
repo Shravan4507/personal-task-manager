@@ -1,6 +1,14 @@
 # PlanIt - Your Smart Task Calendar 📅
 
-A full-featured, professional task calendar web applicati### 🎨 Design Features
+A full-featured, professional task calendar web application with multiple view modes, built with vanilla HTML, CSS, and JavaScript.
+
+## 🌐 Live Demo
+
+**[Visit PlanIt Live](https://shravan4507.github.io/personal-task-manager/)**
+
+Experience the full-featured task calendar in action!
+
+## 🎨 Design Features
 
 ### Dual Theme System
 **Light Theme**
@@ -81,17 +89,21 @@ A full-featured, professional task calendar web applicati### 🎨 Design Feature
 
 ## 🚀 Getting Started
 
-### Installation
-1. Download all three files:
-   - `index.html`
-   - `style.css`
-   - `script.js`
+### Try it Online
+Simply visit **[https://shravan4507.github.io/personal-task-manager/](https://shravan4507.github.io/personal-task-manager/)** to start using PlanIt immediately!
 
-2. Place them in the same directory
+### Local Installation
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/Shravan4507/personal-task-manager.git
+   ```
 
-3. Open `index.html` in any modern web browser
+2. Open `index.html` in any modern web browser
 
 That's it! No server or dependencies required.
+
+### Deploy Your Own
+Want to host your own version? This project is hosted on GitHub Pages. See the [Deployment](#-deployment) section below.
 
 ### Usage
 
@@ -203,7 +215,42 @@ While the current version is fully functional, here are some ideas for expansion
 4. **Backup Regularly**: Export your tasks periodically
 5. **Mobile Usage**: Install as PWA for app-like experience (requires PWA setup)
 
-## 📄 License
+## � Deployment
+
+This project is deployed on **GitHub Pages** and is accessible at:  
+**[https://shravan4507.github.io/personal-task-manager/](https://shravan4507.github.io/personal-task-manager/)**
+
+### How to Deploy Your Own
+
+1. **Fork or clone this repository**
+   ```bash
+   git clone https://github.com/Shravan4507/personal-task-manager.git
+   ```
+
+2. **Push to your GitHub repository**
+   ```bash
+   git add .
+   git commit -m "Initial commit"
+   git push origin main
+   ```
+
+3. **Enable GitHub Pages**
+   - Go to your repository on GitHub
+   - Click on **Settings** tab
+   - Navigate to **Pages** in the left sidebar
+   - Under **Source**, select **Deploy from a branch**
+   - Choose **main** branch and **/ (root)** folder
+   - Click **Save**
+
+4. **Access your site**
+   - Your site will be live at: `https://[your-username].github.io/personal-task-manager/`
+   - It may take a few minutes for the first deployment
+
+### Automatic Deployment
+- Any push to the `main` branch automatically updates the live site
+- Changes typically reflect within 1-2 minutes
+
+## �📄 License
 
 This is a personal project. Feel free to use, modify, and distribute as needed.
 
