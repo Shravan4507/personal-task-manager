@@ -123,9 +123,13 @@ class TaskManager {
             // Custom Time Picker
             timePickerBtn: document.getElementById('timePickerBtn'),
             timePickerOverlay: document.getElementById('timePickerOverlay'),
+            timePickerCloseBtn: document.getElementById('timePickerCloseBtn'),
             taskTimeDisplay: document.getElementById('taskTimeDisplay'),
-            hourColumn: document.getElementById('hourColumn'),
-            minuteColumn: document.getElementById('minuteColumn'),
+            hourInput: document.getElementById('hourInput'),
+            minuteInput: document.getElementById('minuteInput'),
+            selectedHourDisplay: document.getElementById('selectedHourDisplay'),
+            selectedMinuteDisplay: document.getElementById('selectedMinuteDisplay'),
+            timePeriodToggle: document.getElementById('timePeriodToggle'),
             timeSetBtn: document.getElementById('timeSetBtn'),
             timeClearBtn: document.getElementById('timeClearBtn'),
             
@@ -267,24 +271,34 @@ class TaskManager {
         // Custom Time Picker
         this.elements.timePickerBtn.addEventListener('click', () => this.openTimePicker());
         this.elements.taskTimeDisplay.addEventListener('click', () => this.openTimePicker());
+        this.elements.timePickerCloseBtn.addEventListener('click', () => this.closeTimePicker());
         this.elements.timePickerOverlay.addEventListener('click', (e) => {
             if (e.target === this.elements.timePickerOverlay) this.closeTimePicker();
         });
-        // Prevent clicks inside the picker from closing the overlay
-        document.querySelector('#timePickerOverlay .custom-picker').addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
-        this.elements.timeSetBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.setTime();
-        });
-        this.elements.timeClearBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.clearTime();
+        this.elements.timeSetBtn.addEventListener('click', () => this.setTime());
+        this.elements.timeClearBtn.addEventListener('click', () => this.clearTime());
+        
+        // Time input controls
+        this.elements.hourInput.addEventListener('input', () => this.updateTimeDisplay());
+        this.elements.minuteInput.addEventListener('input', () => this.updateTimeDisplay());
+        
+        // Scroll buttons
+        document.querySelectorAll('.time-scroll-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = btn.dataset.target;
+                const direction = btn.classList.contains('up') ? 1 : -1;
+                this.adjustTime(target, direction);
+            });
         });
         
-        // Initialize pickers
-        this.initializeTimePicker();
+        // Period toggle (AM/PM)
+        this.elements.timePeriodToggle.addEventListener('click', (e) => {
+            if (e.target.classList.contains('period-btn')) {
+                this.elements.timePeriodToggle.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                this.updateTimeDisplay();
+            }
+        });
     }
 
     // Switch between views
@@ -1640,44 +1654,39 @@ class TaskManager {
     
     // ===== CUSTOM TIME PICKER =====
     
-    initializeTimePicker() {
-        // Populate hours (00-23)
-        for (let i = 0; i < 24; i++) {
-            const hourEl = document.createElement('div');
-            hourEl.className = 'time-option';
-            hourEl.textContent = String(i).padStart(2, '0');
-            hourEl.dataset.value = i;
-            hourEl.addEventListener('click', () => this.selectHour(i, hourEl));
-            this.elements.hourColumn.appendChild(hourEl);
-        }
-        
-        // Populate minutes (00-59)
-        for (let i = 0; i < 60; i++) {
-            const minuteEl = document.createElement('div');
-            minuteEl.className = 'time-option';
-            minuteEl.textContent = String(i).padStart(2, '0');
-            minuteEl.dataset.value = i;
-            minuteEl.addEventListener('click', () => this.selectMinute(i, minuteEl));
-            this.elements.minuteColumn.appendChild(minuteEl);
-        }
-    }
-    
     openTimePicker() {
-        // Reset or load current time
+        // Load current time or default to now
         if (this.elements.taskTime.value) {
             const [hour, minute] = this.elements.taskTime.value.split(':');
-            this.selectedHour = parseInt(hour);
-            this.selectedMinute = parseInt(minute);
+            const hour24 = parseInt(hour);
+            const hour12 = hour24 === 0 ? 12 : (hour24 > 12 ? hour24 - 12 : hour24);
+            const period = hour24 >= 12 ? 'PM' : 'AM';
+            
+            this.elements.hourInput.value = hour12;
+            this.elements.minuteInput.value = minute;
+            
+            // Set AM/PM
+            this.elements.timePeriodToggle.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.period === period);
+            });
         } else {
             // Default to current time
             const now = new Date();
-            this.selectedHour = now.getHours();
-            this.selectedMinute = now.getMinutes();
+            let hour = now.getHours();
+            const minute = now.getMinutes();
+            const period = hour >= 12 ? 'PM' : 'AM';
+            hour = hour === 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+            
+            this.elements.hourInput.value = hour;
+            this.elements.minuteInput.value = String(minute).padStart(2, '0');
+            
+            // Set AM/PM
+            this.elements.timePeriodToggle.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.period === period);
+            });
         }
         
-        // Update UI
-        this.updateTimeSelection();
-        
+        this.updateTimeDisplay();
         this.elements.timePickerOverlay.classList.add('active');
     }
     
@@ -1685,73 +1694,70 @@ class TaskManager {
         this.elements.timePickerOverlay.classList.remove('active');
     }
     
-    selectHour(hour, element) {
-        this.selectedHour = hour;
+    updateTimeDisplay() {
+        // Get values
+        let hour = parseInt(this.elements.hourInput.value) || 12;
+        let minute = parseInt(this.elements.minuteInput.value) || 0;
         
-        // Update selection
-        this.elements.hourColumn.querySelectorAll('.time-option').forEach(el => {
-            el.classList.remove('selected');
-        });
-        element.classList.add('selected');
+        // Validate and constrain
+        hour = Math.max(1, Math.min(12, hour));
+        minute = Math.max(0, Math.min(59, minute));
         
-        // Scroll to center
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Update inputs with constrained values
+        this.elements.hourInput.value = hour;
+        this.elements.minuteInput.value = String(minute).padStart(2, '0');
+        
+        // Update large display
+        this.elements.selectedHourDisplay.textContent = String(hour).padStart(2, '0');
+        this.elements.selectedMinuteDisplay.textContent = String(minute).padStart(2, '0');
     }
     
-    selectMinute(minute, element) {
-        this.selectedMinute = minute;
-        
-        // Update selection
-        this.elements.minuteColumn.querySelectorAll('.time-option').forEach(el => {
-            el.classList.remove('selected');
-        });
-        element.classList.add('selected');
-        
-        // Scroll to center
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-    
-    updateTimeSelection() {
-        // Clear previous selections
-        this.elements.hourColumn.querySelectorAll('.time-option').forEach(el => {
-            el.classList.remove('selected');
-            if (parseInt(el.dataset.value) === this.selectedHour) {
-                el.classList.add('selected');
-                setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
-            }
-        });
-        
-        this.elements.minuteColumn.querySelectorAll('.time-option').forEach(el => {
-            el.classList.remove('selected');
-            if (parseInt(el.dataset.value) === this.selectedMinute) {
-                el.classList.add('selected');
-                setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
-            }
-        });
+    adjustTime(target, direction) {
+        if (target === 'hour') {
+            let hour = parseInt(this.elements.hourInput.value) || 12;
+            hour += direction;
+            if (hour > 12) hour = 1;
+            if (hour < 1) hour = 12;
+            this.elements.hourInput.value = hour;
+        } else if (target === 'minute') {
+            let minute = parseInt(this.elements.minuteInput.value) || 0;
+            minute += direction * 5; // Increment by 5 minutes
+            if (minute >= 60) minute = 0;
+            if (minute < 0) minute = 55;
+            this.elements.minuteInput.value = String(minute).padStart(2, '0');
+        }
+        this.updateTimeDisplay();
     }
     
     setTime() {
-        if (this.selectedHour !== null && this.selectedMinute !== null) {
-            const timeStr = `${String(this.selectedHour).padStart(2, '0')}:${String(this.selectedMinute).padStart(2, '0')}`;
-            this.elements.taskTime.value = timeStr;
-            
-            // Update display
-            const hour12 = this.selectedHour % 12 || 12;
-            const ampm = this.selectedHour >= 12 ? 'PM' : 'AM';
-            this.elements.taskTimeDisplay.value = `${String(hour12).padStart(2, '0')}:${String(this.selectedMinute).padStart(2, '0')} ${ampm}`;
-            
-            this.closeTimePicker();
-        } else {
-            this.showToast('Please select both hour and minute');
+        let hour = parseInt(this.elements.hourInput.value) || 12;
+        let minute = parseInt(this.elements.minuteInput.value) || 0;
+        const period = this.elements.timePeriodToggle.querySelector('.period-btn.active').dataset.period;
+        
+        // Convert to 24-hour format
+        if (period === 'PM' && hour !== 12) {
+            hour += 12;
+        } else if (period === 'AM' && hour === 12) {
+            hour = 0;
         }
+        
+        // Set the hidden input value
+        const timeStr = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+        this.elements.taskTime.value = timeStr;
+        
+        // Update display input
+        const displayHour = hour === 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+        this.elements.taskTimeDisplay.value = `${String(displayHour).padStart(2, '0')}:${String(minute).padStart(2, '0')} ${period}`;
+        
+        this.closeTimePicker();
+        this.showToast('Time set successfully');
     }
     
     clearTime() {
         this.elements.taskTime.value = '';
         this.elements.taskTimeDisplay.value = '';
-        this.selectedHour = null;
-        this.selectedMinute = null;
         this.closeTimePicker();
+        this.showToast('Time cleared');
     }
     
     // ===== KEYBOARD SHORTCUTS MODAL =====

@@ -648,18 +648,58 @@
         
         <!-- Custom Time Picker -->
         <div class="custom-picker-overlay" id="timePickerOverlay">
-            <div class="custom-picker time-picker">
+            <div class="custom-picker time-picker-modal">
                 <div class="picker-header">
                     <div class="picker-title">Select Time</div>
+                    <button type="button" class="picker-close-btn" id="timePickerCloseBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
                 </div>
                 <div class="time-picker-body">
-                    <div class="time-column-wrapper">
-                        <div class="time-column" id="hourColumn">
-                            <!-- Hours 00-23 -->
+                    <div class="time-display-large">
+                        <span class="time-display-hour" id="selectedHourDisplay">12</span>
+                        <span class="time-display-colon">:</span>
+                        <span class="time-display-minute" id="selectedMinuteDisplay">00</span>
+                    </div>
+                    <div class="time-period-toggle" id="timePeriodToggle">
+                        <button type="button" class="period-btn active" data-period="AM">AM</button>
+                        <button type="button" class="period-btn" data-period="PM">PM</button>
+                    </div>
+                    <div class="time-inputs-container">
+                        <div class="time-input-group">
+                            <label>Hour</label>
+                            <div class="time-scroll-wrapper">
+                                <button type="button" class="time-scroll-btn up" data-target="hour">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                                <input type="number" id="hourInput" class="time-number-input" min="1" max="12" value="12">
+                                <button type="button" class="time-scroll-btn down" data-target="hour">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <div class="time-separator">:</div>
-                        <div class="time-column" id="minuteColumn">
-                            <!-- Minutes 00-59 -->
+                        <span class="time-input-separator">:</span>
+                        <div class="time-input-group">
+                            <label>Minute</label>
+                            <div class="time-scroll-wrapper">
+                                <button type="button" class="time-scroll-btn up" data-target="minute">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                                <input type="number" id="minuteInput" class="time-number-input" min="0" max="59" value="00">
+                                <button type="button" class="time-scroll-btn down" data-target="minute">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
