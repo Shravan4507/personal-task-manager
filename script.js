@@ -270,8 +270,18 @@ class TaskManager {
         this.elements.timePickerOverlay.addEventListener('click', (e) => {
             if (e.target === this.elements.timePickerOverlay) this.closeTimePicker();
         });
-        this.elements.timeSetBtn.addEventListener('click', () => this.setTime());
-        this.elements.timeClearBtn.addEventListener('click', () => this.clearTime());
+        // Prevent clicks inside the picker from closing the overlay
+        document.querySelector('#timePickerOverlay .custom-picker').addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+        this.elements.timeSetBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.setTime();
+        });
+        this.elements.timeClearBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.clearTime();
+        });
         
         // Initialize pickers
         this.initializeTimePicker();
