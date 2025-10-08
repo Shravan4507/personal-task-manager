@@ -3147,7 +3147,7 @@ body {
     background: var(--card-bg);
     border-radius: 12px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    width: 320px;
+    width: 400px;
     max-width: 90vw;
     animation: slideUp 0.3s ease;
     overflow: hidden;
@@ -3370,6 +3370,7 @@ body {
     padding: 16px 20px;
     border-top: 1px solid var(--border-color);
     background: var(--hover-bg);
+    justify-content: space-between;
 }
 
 [data-theme="dark"] .picker-footer {
@@ -3378,6 +3379,7 @@ body {
 
 .picker-btn {
     flex: 1;
+    min-width: 100px;
     padding: 10px 16px;
     border: none;
     border-radius: 8px;
@@ -3386,6 +3388,7 @@ body {
     cursor: pointer;
     transition: all 0.2s ease;
     font-family: inherit;
+    white-space: nowrap;
 }
 
 .picker-btn-secondary {
