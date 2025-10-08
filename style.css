@@ -3286,7 +3286,8 @@ body {
 
 /* Time Picker Specific */
 .time-picker {
-    width: 280px;
+    width: 100%;
+    max-width: 400px;
 }
 
 .time-picker-body {
@@ -3303,10 +3304,13 @@ body {
     border-radius: 12px;
     padding: 12px;
     border: 1px solid var(--border-color);
+    max-width: 100%;
 }
 
 .time-column {
     flex: 1;
+    max-width: 80px;
+    min-width: 60px;
     max-height: 240px;
     overflow-y: auto;
     scroll-behavior: smooth;
@@ -3371,6 +3375,7 @@ body {
     border-top: 1px solid var(--border-color);
     background: var(--hover-bg);
     justify-content: space-between;
+    flex-wrap: nowrap;
 }
 
 [data-theme="dark"] .picker-footer {
